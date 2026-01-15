@@ -1,5 +1,3 @@
-local TowersFolder = workspace:WaitForChild("Towers")
-local count = 1
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
    Name = "TDS Autoupgrade",
@@ -38,6 +36,18 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
+local MainTab = Window:CreateTab("Main", nil) 
+local Toggle = MainTab:CreateToggle({
+   Name = "Autoupgrade",
+   CurrentValue = false,
+   Flag = "ToggleAutoUpgrade", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+       AutoUpgrade = Value       
+   end,
+})
+
+local TowersFolder = workspace:WaitForChild("Towers")
+local count = 1
 local function RenameTowers()
     for _, child in ipairs(TowersFolder:GetChildren()) do
         if type(tonumber(child.Name)) ~= "number" then        
@@ -60,16 +70,6 @@ TowersFolder.ChildRemoved:Connect(function()
   task.wait(0.1)
   RenameTowers()
 end)
-
-local MainTab = Window:CreateTab("Main", nil) 
-local Toggle = MainTab:CreateToggle({
-   Name = "Autoupgrade",
-   CurrentValue = false,
-   Flag = "ToggleAutoUpgrade", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-       AutoUpgrade = Value       
-   end,
-})
 
 task.spawn(function()
     while true do
