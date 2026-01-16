@@ -1,40 +1,41 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
+--Rayfield UI stuff
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
    Name = "TDS Autoupgrade",
-   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   Icon = 0,
    LoadingTitle = "Loading...",
    LoadingSubtitle = "by Mirmeks",
-   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+   ShowText = "Rayfield",
+   Theme = "Default",
 
-   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+   ToggleUIKeybind = "K",
 
    DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+   DisableBuildWarnings = false, 
 
    ConfigurationSaving = {
       Enabled = false,
-      FolderName = nil, -- Create a custom folder for your hub/game
+      FolderName = nil, 
       FileName = "Big Hub"
    },
 
    Discord = {
-      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+      Enabled = false,
+      Invite = "noinvitelink",
+      RememberJoins = true 
    },
 
-   KeySystem = false, -- Set this to true to use our key system
+   KeySystem = false, 
    KeySettings = {
       Title = "Untitled",
       Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+      Note = "No method of obtaining the key is provided",
+      FileName = "Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {"Hello"}
    }
 })
 
@@ -42,7 +43,7 @@ local MainTab = Window:CreateTab("Main", nil)
 local Toggle = MainTab:CreateToggle({
    Name = "Autoupgrade",
    CurrentValue = false,
-   Flag = "ToggleAutoUpgrade", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "ToggleAutoUpgrade",
    Callback = function(Value)
        AutoUpgrade = Value       
    end,
@@ -59,12 +60,12 @@ local function RenameTowers()
     end
 end
 
--- Первичное переименование
+-- First rename
 RenameTowers()
 
--- Обновление в реальном времени
+-- Realtime rename
 TowersFolder.ChildAdded:Connect(function()
-  task.wait(0.1) -- маленькая задержка для стабильности
+  task.wait(0.1)
   RenameTowers()
 end)
 
@@ -73,6 +74,7 @@ TowersFolder.ChildRemoved:Connect(function()
   RenameTowers()
 end)
 
+--Autoupgrade function
 task.spawn(function()
     while true do
         task.wait(0.2)
