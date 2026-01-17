@@ -1,5 +1,5 @@
 --Game checker
-if game.PlaceId ~= 3260590327 then
+if game.PlaceId ~= 1176784616 then
   return
 end
 
