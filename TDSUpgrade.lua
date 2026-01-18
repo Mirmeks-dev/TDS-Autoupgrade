@@ -49,7 +49,7 @@ local Toggle = MainTab:CreateToggle({
    end,
 })
 
-local Dropdown = Tab:CreateDropdown({
+local Dropdown = MainTab:CreateDropdown({
    Name = "Autoupgrade mode",
    Options = {"Cheapest","Best DPS/$"},
    CurrentOption = {"Cheapest"},
@@ -58,8 +58,10 @@ local Dropdown = Tab:CreateDropdown({
    Callback = function(Options)
          if Options[1] == "Cheapest" then
             CheapestAutoUpgrade = true
+            BestDPSAutoUpgrade = false
          elseif Options[1] == "Best DPS/$" then
             BestDPSAutoUpgrade = true
+            CheapestAutoUpgrade = false
          end   
    end,
 })
@@ -200,8 +202,8 @@ task.spawn(function()
                     game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))   
                 end
             end   
-         elseif Autoupgrade and BestDPSAutoUpgrade then
+        elseif Autoupgrade and BestDPSAutoUpgrade then
             print("WIP")
-         end
+        end
     end
 end)       
