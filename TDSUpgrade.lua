@@ -202,7 +202,7 @@ task.spawn(function()
                     game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))   
                 end
             end   
-        elseif Autoupgrade and BestDPSAutoUpgrade then
+        elseif AutoUpgrade and BestDPSAutoUpgrade then
             print("WIP")
         end
     end
