@@ -125,7 +125,8 @@ local function getTowerStats(towerName)
 end
 
 local TestTower = "Cowboy"
-print(getTowerStats(TestTower))
+local TestStat = getTowerStats(TestTower)
+print(TestStat.Damage)
 
 --DPS Calculation
 local function calculateDPS(stats)
