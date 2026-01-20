@@ -124,10 +124,6 @@ local function getTowerStats(towerName)
     return statsModule
 end
 
-local test = "Brawler"
-local testStats = getTowerStats(test)
-print(testStats.Income)
-
 --DPS Calculation
 local function calculateDPS(stats)
     if stats.Damage and stats.Cooldown then
