@@ -1,5 +1,5 @@
 --Game checker
-if game.PlaceId ~= 1176784616 then
+if game.PlaceId ~= 5591597781 then
   print("Не тот ID")
   return
 end
