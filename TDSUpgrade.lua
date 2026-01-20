@@ -126,7 +126,9 @@ end
 
 local TestTower = "Cowboy"
 local TestStat = getTowerStats(TestTower)
-print(TestStat[1])
+for key, value in pairs(TestStat) do
+   print(value)
+end   
 
 --DPS Calculation
 local function calculateDPS(stats)
