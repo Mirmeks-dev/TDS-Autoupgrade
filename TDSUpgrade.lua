@@ -124,7 +124,7 @@ local function getTowerStats(towerName)
     return statsModule
 end
 
-local test = "Cowboy"
+local test = "Brawler"
 local testStats = getTowerStats(test)
 print(testStats.Income)
 
