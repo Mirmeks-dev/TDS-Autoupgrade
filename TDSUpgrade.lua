@@ -177,7 +177,7 @@ local function calculateAllDPS(towerName)
                     Damage = currentStats.Damage or 0,
                     Cooldown = currentStats.Cooldown or 1,
                     DPS = levelDPS,
-                    Title = upgrade.Title or "Апгрейд " .. level,
+                    Title = upgrade.Title or "Upgrade " .. level,
                     Cost = upgrade.Cost or 0
                 })
             end
