@@ -126,7 +126,7 @@ end
 
 local test = "Cowboy"
 local testStats = getTowerStats(test)
-print(testStats.Cooldown)
+print(testStats.Income)
 
 --DPS Calculation
 local function calculateDPS(stats)
