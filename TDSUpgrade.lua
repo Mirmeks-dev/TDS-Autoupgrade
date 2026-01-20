@@ -124,12 +124,6 @@ local function getTowerStats(towerName)
     return statsModule
 end
 
-local TestTower = "Cowboy"
-local TestStat = getTowerStats(TestTower)
-for key, value in pairs(TestStat) do
-   print(value)
-end   
-
 --DPS Calculation
 local function calculateDPS(stats)
     if stats.Damage and stats.Cooldown then
