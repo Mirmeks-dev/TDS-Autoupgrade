@@ -124,6 +124,10 @@ local function getTowerStats(towerName)
     return statsModule
 end
 
+local test = "Cowboy"
+local testStats = getTowerStats(test)
+print(testStats.Cooldown)
+
 --DPS Calculation
 local function calculateDPS(stats)
     if stats.Damage and stats.Cooldown then
