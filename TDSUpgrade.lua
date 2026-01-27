@@ -1,5 +1,15 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
+--Variable stuff
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local stateReplicators = ReplicatedStorage:WaitForChild("StateReplicators")
+local TowerStatsFolder = ReplicatedStorage:WaitForChild("Content"):WaitForChild("Tower")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local TowersFolder = workspace:WaitForChild("Towers")
+local count = 1
+
 --Rayfield UI stuff
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
@@ -66,14 +76,91 @@ local Dropdown = MainTab:CreateDropdown({
    end,
 })
 
---Variable stuff
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local stateReplicators = ReplicatedStorage:WaitForChild("StateReplicators")
-local TowerStatsFolder = ReplicatedStorage:WaitForChild("Content"):WaitForChild("Tower")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local TowersFolder = workspace:WaitForChild("Towers")
-local count = 1
+local Button = MainTab:CreateButton({
+   Name = "Random Towers",
+   Callback = function()
+       local TowersFolder2 = ReplicatedStorage.Content:WaitForChild("Tower")
+       local Remote = ReplicatedStorage:WaitForChild("RemoteFunction")
+       local TowerList = table.clone(TowersFolder:GetChildren())
+       --Getting tower list
+       for i = #TowerList, 2, -1 do
+           local j = math.random(1, i)
+           TowerList[i], TowerList[j] = TowerList[j], TowerList[i]
+       end
+       --Replicator
+       local MyReplicator = nil
+
+       for _, r in ipairs(StateReplicators:GetChildren()) do
+           if r:GetAttribute("UserId") == player.UserId then
+               MyReplicator = r
+               break
+           end
+       end
+
+       --Getting equipped towers for random
+       local function GetEquippedTowers()
+           local equipped = MyReplicator:GetAttribute("EquippedTowers")
+           if not equipped then return {} end
+           
+           local json = equipped:match("%[.*%]")
+           if not json then return {} end
+
+           local ok, decoded = pcall(function()
+               return HttpService:JSONDecode(json)
+           end)
+
+           return ok and decoded or {}
+       end
+         
+       --Wait to confirm equip
+       local function WaitForEquipOnce(towerName, timeout)
+           timeout = timeout or 1.5
+           local start = os.clock()
+
+           while os.clock() - start < timeout do
+               for _, t in ipairs(GetEquippedTowers()) do
+                   if tostring(t) == towerName then
+                       return true
+                   end
+               end
+               task.wait(0.05)
+          end
+          return false
+      end
+         
+      --Unequip
+      for _, tower in ipairs(GetEquippedTowers()) do
+          Remote:InvokeServer(
+              "Inventory", "Unequip", "tower", tostring(tower)
+          )
+          task.wait(0.05)
+      end
+
+      local MAX_TOWERS = 5
+      local EquippedCount = 0
+
+      for i = 1, #TowerList do
+          if EquippedCount >= MAX_TOWERS then break end
+
+          local towerName = TowerList[i].Name
+
+          Remote:InvokeServer(
+              "Inventory", "Equip", "tower", towerName
+          )
+
+          if WaitForEquipOnce(towerName, 1.5) then
+              EquippedCount += 1
+              print("✅ Equipped:", towerName)
+          else
+              warn("❌ Server refused to confirm the equip:", towerName)
+          end
+
+          task.wait(0.1)
+      end
+
+      print("🎯 Done, towers equipped:", EquippedCount)
+      end,
+   })
 
 --Rename function
 local function RenameTowers()
@@ -98,20 +185,6 @@ TowersFolder.ChildRemoved:Connect(function()
   task.wait(0.1)
   RenameTowers()
 end)
-
---Getting tower names
-for _, replicator in ipairs(stateReplicators:GetChildren()) do
-    if replicator:GetAttribute("UserId") == player.UserId then
-        local equipped = replicator:GetAttribute("EquippedTowers")        
-        local cleaned_json = equipped:match("%[.*%]") 
-        local ok, decoded = pcall(function()
-                return game:GetService("HttpService"):JSONDecode(cleaned_json)
-        end)    
-        if ok then
-            equipped = decoded
-        end
-    end
-end
 
 --Getting towers stats
 local function getTowerStats(towerName)
