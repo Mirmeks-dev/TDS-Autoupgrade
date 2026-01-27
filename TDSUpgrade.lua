@@ -51,7 +51,7 @@ local Toggle = MainTab:CreateToggle({
 
 local Dropdown = MainTab:CreateDropdown({
    Name = "Autoupgrade mode",
-   Options = {"Cheapest","Best DPS/$"},
+   Options = {"Cheapest"},
    CurrentOption = {"Cheapest"},
    MultipleOptions = false,
    Flag = "AutoUpgradeMode",
